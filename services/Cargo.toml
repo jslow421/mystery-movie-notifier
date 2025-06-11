@@ -1,0 +1,11 @@
+[workspace]
+members = ["notifier", "processor", "retriever"]
+resolver = "2"
+
+# Shared dependencies for all workspace members
+[workspace.dependencies]
+tokio = "1.0"
+lambda_runtime = "0.13.0"
+aws_lambda_events = { version = "0.15.1", default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
