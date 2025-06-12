@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mystery-movie-notifier:
+    build: .
+    environment:
+      - TARGET_URL=${TARGET_URL}
+      - ELEMENT_SELECTOR=${ELEMENT_SELECTOR}
+      - SMS_API=${SMS_API}
+      - API_KEY=${API_KEY}
+      - PHONE_NUMBER=${PHONE_NUMBER}
+      - DATABASE_URL=${DATABASE_URL}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_FROM_NUMBER=${TWILIO_FROM_NUMBER}
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - mystery-movie-network
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-mystery_movie_db}
+      - POSTGRES_USER=${POSTGRES_USER:-mystery_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - mystery-movie-network
+
+volumes:
+  postgres_data:
+
+networks:
+  mystery-movie-network:
+    driver: bridge

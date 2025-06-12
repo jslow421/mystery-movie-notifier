@@ -1,0 +1,15 @@
+# Example override file for using external PostgreSQL on NAS
+# Copy this to docker-compose.override.yml and modify as needed
+
+version: '3.8'
+
+services:
+  mystery-movie-notifier:
+    environment:
+      # Use external PostgreSQL database on NAS
+      - DATABASE_URL=postgres://mystery_user:your_password@your_nas_ip:5432/mystery_movie_db?sslmode=disable
+    # Remove depends_on since we're using external database
+    depends_on: []
+
+# Remove the postgres service since it's running on NAS
+# postgres: null  # This doesn't work in docker-compose, so just don't include it
