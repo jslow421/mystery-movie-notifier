@@ -1,0 +1,27 @@
+FROM rust:1.84-alpine as builder
+
+WORKDIR /app
+COPY Cargo.toml Cargo.lock ./
+COPY src ./src
+
+RUN cargo build --release
+
+# Runtime stage with Chrome
+FROM alpine:3.20
+
+RUN apk add --no-cache \
+    chromium \
+    chromium-chromedriver \
+    ca-certificates
+
+# Copy the binary from builder stage
+COPY --from=builder /app/target/release/your-scraper /usr/local/bin/scraper
+
+# Create non-root user for Chrome security
+RUN groupadd -r scraper && useradd -r -g scraper -G audio,video scraper &&
+    mkdir -p /home/scraper && chown -R scraper:scraper /home/scraper
+
+USER scraper
+# Create non-root user for Chrome security
+RUN addgroup -S scraper && adduser -S scraper -G scraper &&
+    mkdir -p /home/scraper && chown -R scraper:scraper /home/scraper
