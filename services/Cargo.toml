@@ -6,8 +6,10 @@ edition = "2024"
 [dependencies]
 aws-config = "1.8.16"
 aws-sdk-dynamodb = "1.111.0"
+headless_chrome = "1.0.21"
 lambda_runtime = "1.1.3"
 rquest = { version = "5.1.0", features = ["full"] }
+rquest-util = "2.2.1"
 scraper = "0.26.0"
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
